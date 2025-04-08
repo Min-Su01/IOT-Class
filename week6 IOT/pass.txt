@@ -1,0 +1,53 @@
+학번 파일안에 Blink 파일
+
+vim BlinkAppC.nc
+
+--------------------------------
+configuration BlickAppC
+{
+}
+implementataion
+{
+	components MainC, BlinkC, LedsC;
+	components new TimerMillic() as Timer0;
+
+	Blink -> MainC.Boot;
+	
+	BlinkC.Timer0 -> Timer0;
+	BlinkC.Leds -> LedsC;
+}
+-------------------------------
+
+
+vim BlinkC.nc
+
+------------------------------
+#include "Timer.h"
+
+module BlinkC @safe()
+{
+	uses interface Timer<TMilli>as Timer0;
+	uses interface Leds;
+	uses interface Boot;
+}
+implementataion
+{
+	event voide Boot.booted()
+	{
+	 call Timer0.startPeriodic( 250 );
+	}
+	event void Timer0.fired()
+	{
+	 call Leds.led0Toggle();
+	}
+}
+-------------------------------
+
+vim Makefile
+-------------------------------
+COMPONENT = BlinkAppC
+include$(MAKERULES)
+--------------------------------
+(usb 삽입 후)
+make telosb install.100
+(펌웨어 업로드)
