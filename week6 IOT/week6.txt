@@ -1,0 +1,15 @@
+Cygwin Terminal에서
+/home/PC == ~
+
+ls : now file list
+ls -al: all file list
+mkdir ~ : ~ make file
+cd ~ : (change)(directory) ~로 이동
+cd .. : 상위 디렉토리 이동 
+$ cd /home/PC/202144049 : 202144049파일로 절대이동 (대소문자 구분함)
+vim test.c  : test C파일 생성 및 진입 (확장자C)
+:wq enter : escape insert mode
+gcc -o 실행파일이름 소스파일 : 컴파일(오류 확인)
+./파일 이름.exe : 파일 내용 출력
+
+
