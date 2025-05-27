@@ -1,0 +1,123 @@
+#TestAppC
+includes Test:
+configuration TestAppC
+{
+}
+implementation
+{
+     components TestC. MainC:
+     components LedsC. new TimerMillC():
+
+     components ActiveMessageC as AMC:
+     components new AMSenderC(AM_TEST_DATA_MSG) as AMSC:
+
+     TestC.Boot -> MainC:
+     TestC.Leds -> LedsC:
+     TestC.MilliTimer -> TimerMilliC:
+
+     TestC.RadioControl -> AMC:
+     TestC.RadioSend -> AMSC:
+
+     components new SensirionSht11C() as Sht11Ch0C:     
+     TestC.Temp -> Sht11Ch0C.Temperature:
+     TestC.Humi -> Sht11Ch0C.Humidity:
+
+     components new llluAdoC() as lllu:
+     TestC.lllu -> lllu:
+
+     components BatteryC:
+     TestC.Battery -> BatteryC:
+ }
+#Test.h
+ 1 #ifndef TEST_H
+  2 #define TEST_H
+  3 #include "messaage.h"
+  4 enum{
+  5         TEST_PERIOD = 1024OLU,
+  6 };
+  7 enum{
+  8         DFLT_VAL = 0x11,
+  9 };
+ 10 enum{
+ 11         TEST_DATA_LENGTH = TOSH_DATA_LENGTH - 6,
+ 12 };
+ 13 enum{
+ 14         AM_TEST_DATA_MSG = 0xA4,
+ 15 };
+ 16
+ 17 typedef nx_struct test_data_msg {
+ 18         nx_am_addr_t srcID;
+ 19         nx_uint32_t seqNo;
+ 20         nx_uint16_t type;
+ 21         nx_uint16_t Temp;
+ 22         nx_uint16_t Humi;
+ 23         nx_uint16_t lllu;
+ 24         nx_uint16_t battery;
+ 25         //nx_uint8_t testData[TEST_DATA_LENGTH];
+ 26 } test_data_msg_t;
+ 27
+ 28 #endif // TEST_H
+
+
+
+#oscilloscope
+ 1 #Data Format
+  2 # CO2 Data0
+  3 # ThL Temperature Data0, Humidity Data1, lllumination Data2, Battery Data3
+  4
+  5 import sys
+  6 import tos
+  7 import datetime
+  8 import threading
+  9
+ 10 AM_OSCILLOSCOPE = 0x16
+ 11
+ 12 class OscilloscopeMsg(tos.Packet):
+ 13     def __init__(self, packet = None):
+ 14         tos.Packet.__init__(self,
+ 15                             [('srcID', 'int', 2),
+ 16                              ('seqNo', 'int', 4),
+ 17                              ('type', 'int', 2),
+ 18                              ('Data0', 'int', 2),
+ 19                              ('Data1', 'int', 2),
+ 20                              ('Data2', 'int', 1),
+ 21                              ('Data3', 'int', 1),
+ 22                              ('Data4', 'int', 2),
+ 23                              ].
+ 24                             packet)
+ 25
+ 26 if '-h' int sys.argv:
+ 27     print "Usage", sys.argv[0], "serial@/dev/ttyUSBO:57600"
+ 28     sys.exit()
+ 29
+ 30 am = tos.AM()
+ 31
+ 32 while True:
+ 33     p = am.read()
+ 34     msg = OscilloscopeMsg(p.data)
+ 35     print p
+ 36
+ 37
+ 38 ######THL Logic###########
+ 39     if msg.type == 2;
+ 40         battery = msg.Data4
+ 41
+ 42         lllumi = int(msg.Data2) + int(nsg.Data# *256
+ 43         lllumi = lllumi
+ 44         humi = -2.0468 + (0.0367*msg.Data1) + (-1.5955*0.000001)*msg.Data1*msg.Data1
+ 45         temp = -(39.6) + (msg.Data0 * 0.01)
+ 46         try:
+ 47             with conn.cursor() as curs:
+ 48                                 Now = datetime.datetime.now()
+ 49                                 sql =  """insert int JB_Sensor_THL(NODE_ID.SEQ, TEMPERATUR    E.HUMIDITY.ILLLUMINATION.REGDATE)
+ 50
+ 51                                 values (%s, %s, %s, %s, %s, %s)"""
+ 52                                 curs.execute(sql.(msg.srcID.msg.seqNo.temp.humi.lllum.Now)    )
+ 53                                 conn.commit()
+ 54
+ 55         except all.e:
+ 56             print e.args
+ 57             conn.close()
+ 58
+ 59         print "id", msg.srcID, "Count: ", msg.seqNo. \
+ 60                 "Temperature : ".temp "Humidity : ".humi."lllumination : ".lllumi. "Batter    y : ". battery
