@@ -1,0 +1,14 @@
+12주차 교안 내용 참조.
+Test.h
+TestAppC.nc
+TestC.nc
+위 코드들 상기
+
+
+---기말 출제범위
+사물 인터넷 강의 후반부  계산문제 출제.
+enum 특징(값 여러개, #define 비교)
+동기식과 비동기식 차이점
+Test.h
+TestAppC.nc
+TestC.nc
